@@ -81,6 +81,45 @@ async function main() {
     .then(response => console.log("Resposta do servidor:", response.data))
 
     // exercicio 5
+    let ano = exercicios['ano-bissexto'].entrada.ano;
+    let resultadoBissexto = bissexto(ano);
+    console.log("Ano bissexto:", resultadoBissexto);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/ano-bissexto`, {
+        'resposta': resultadoBissexto
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
+
+    // exercicio 6
+    let raio = exercicios['volume-da-pizza'].entrada.z;
+    let altura = exercicios['volume-da-pizza'].entrada.a;
+    let resultadoPizza = volumePizza(raio, altura);
+    console.log("Volume da pizza:", resultadoPizza);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/volume-da-pizza`, {
+        'resposta': resultadoPizza
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
+
+    // exercicio 7
+    let posic_inic = exercicios['mru'].entrada.s0;
+    let veloc = exercicios['mru'].entrada.v;
+    let t = exercicios['mru'].entrada.t;
+    let resultadoMRU = calculaMRU(posic_inic, veloc, t);
+    console.log("Posição final do MRU:", resultadoMRU);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/mru`, {
+        'resposta': resultadoMRU
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))    
+
+    // exercicio 8
+    let stringInvertida = exercicios['inverte-string'].entrada.string;
+    let resultadoInvertida = inverteString(stringInvertida);
+    console.log("String invertida:", resultadoInvertida);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/inverte-string`, {
+        'resposta': resultadoInvertida
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
+
+    // exercicio 9
     
 }
 
@@ -98,18 +137,43 @@ function pegaUsuario(email){
 }
 
 function jacaWars(v, theta) {
-    const g = 9.8; // Aceleração devido à gravidade em m/s^2
-    const targetDistance = 100; // Distância do alvo em metros
-    const spreadRadius = 2; // Raio de espalhamento da jaca em metros
+    const g = 9.8; 
+    const targetDistance = 100; 
+    const spreadRadius = 2; 
     const thetaRadians = theta * Math.PI / 180;
     const distance = (v * v * Math.sin(2 * thetaRadians)) / g;
     if (distance < targetDistance - spreadRadius) {
-        return -1; // A jaca não chegou ao alvo
+        return -1; // não chegou 
     } else if (distance > targetDistance + spreadRadius) {
-        return 1; // A jaca passou do alvo
+        return 1; // passou
     } else {
-        return 0; // A jaca atingiu o alvo
+        return 0; // atingiu
     }
+}
+
+function bissexto(ano) {
+    if (ano % 400 === 0) {
+        return true;
+    } else if (ano % 100 === 0) {
+        return false;
+    } else if (ano % 4 === 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function volumePizza(raio, altura) {
+    return Math.round(Math.PI * raio * raio * altura);
+}
+
+function calculaMRU(posic_inic, veloc, t) {
+    const posicaoFinal = posic_inic + veloc * t;
+    return posicaoFinal;
+}
+
+function inverteString(stringInvertida) {
+    return stringInvertida.split('').reverse().join('');
 }
 
 main();
