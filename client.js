@@ -120,7 +120,76 @@ async function main() {
     .then(response => console.log("Resposta do servidor:", response.data))
 
     // exercicio 9
-    
+    let objeto = exercicios['soma-valores'].entrada.objeto;
+    let resultadoSomaValores = somaValores(objeto);
+    console.log("Soma dos valores do objeto:", resultadoSomaValores);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/soma-valores`, {
+        'resposta': resultadoSomaValores
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
+
+    // exercicio 10
+    let n = exercicios['n-esimo-primo'].entrada.n;
+    let resultadoPrimo = encontraNesimoPrimo(n);
+    console.log("N-ésimo primo:", resultadoPrimo);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/n-esimo-primo`, {
+        'resposta': resultadoPrimo
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
+
+    // exercicio 11
+    let palavras = exercicios['maior-prefixo-comum'].entrada.strings;
+    let resultadoPrefixo = maiorPrefixoComum(palavras);
+    console.log("Maior prefixo comum:", resultadoPrefixo);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/maior-prefixo-comum`, {
+        'resposta': resultadoPrefixo
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
+
+    // exercicio 12
+    let numeros = exercicios['soma-segundo-maior-e-menor-numeros'].entrada.numeros; 
+    let resultadoSomaSegundo = somaSegundoMaiorMenor(numeros);
+    console.log("Soma do segundo maior e menor números:", resultadoSomaSegundo);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/soma-segundo-maior-e-menor-numeros`, {
+        'resposta': resultadoSomaSegundo
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
+
+    // exercicio 13
+    let palavras2 = exercicios['conta-palindromos'].entrada.palavras;
+    let resultadoPalindromos = contaPalindromos(palavras2);
+    console.log("Quantidade de palíndromos:", resultadoPalindromos);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/conta-palindromos`, {
+        'resposta': resultadoPalindromos
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
+
+    // exercicio 14
+    let strings2 = exercicios['soma-de-strings-de-ints'].entrada.strings;
+    let resultadoSomaStrings = somaStrings(strings2);
+    console.log("Soma de strings de ints:", resultadoSomaStrings);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/soma-de-strings-de-ints`, {
+        'resposta': resultadoSomaStrings
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
+
+    // exercicio 15
+    let endpoints = exercicios['soma-com-requisicoes'].entrada.endpoints;
+    let resultadoSomaRequisicoes = somaRequisicoes(endpoints);
+    console.log("Soma com requisições:", resultadoSomaRequisicoes);
+    axios.post(`https://tecweb-js.insper-comp.com.br/exercicio/soma-com-requisicoes`, {
+        'resposta': resultadoSomaRequisicoes
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
+
+    // exercicio 16
+    let url = exercicios['caca-ao-tesouro'].entrada.inicio;
+    let tesouro = cacaAoTesouro(url,token)
+    console.log("Tesouro:", tesouro)
+    axios.post('https://tecweb-js.insper-comp.com.br/exercicio/caca-ao-tesouro', {
+        'resposta': tesouro
+    }, config)
+    .then(response => console.log("Resposta do servidor:", response.data))
 }
 
 function soma(a, b) {
@@ -176,4 +245,135 @@ function inverteString(stringInvertida) {
     return stringInvertida.split('').reverse().join('');
 }
 
+function somaValores(objeto) {
+    let soma = 0;
+    for (let chave in objeto) {
+        if (typeof objeto[chave] === 'number') {
+            soma += objeto[chave];
+        }
+    }
+    return soma;
+}
+
+function encontraNesimoPrimo(n) {
+    let count = 0;
+    let num = 2;  
+    const isPrime = (number) => {
+        if (number <= 1) return false;
+        if (number <= 3) return true;
+        if (number % 2 === 0 || number % 3 === 0) return false;
+        let i = 5;
+        while (i * i <= number) {
+            if (number % i === 0 || number % (i + 2) === 0) return false;
+            i += 6;
+        }
+        return true;
+    };
+    while (true) {
+        if (isPrime(num)) {
+            count++;
+            if (count === n) return num; // Retorna o número se é o n-ésimo primo
+        }
+        num++;
+    }
+}
+
+function maiorPrefixoComum(p){
+    let maior = "";
+    for (let i = 0; i < p.length - 1; i++) {
+        for (let j = i + 1; j < p.length; j++) {
+            let prefixo = "";
+            let k = 0;
+            while (k < p[i].length && k < p[j].length && p[i][k] === p[j][k]) {
+                prefixo += p[i][k];
+                k++;
+            }
+            if (prefixo.length > maior.length) {
+                maior = prefixo;
+            }
+        }
+    }
+
+    return maior;
+}
+
+function somaSegundoMaiorMenor(numeros) { 
+    let maior = Math.max(...numeros);
+    let menor = Math.min(...numeros);
+    let segundoMaior = -Infinity;
+    let segundoMenor = Infinity;
+    for (let i = 0; i < numeros.length; i++) {
+        if (numeros[i] > segundoMaior && numeros[i] < maior) {
+            segundoMaior = numeros[i];
+        }
+        if (numeros[i] < segundoMenor && numeros[i] > menor) {
+            segundoMenor = numeros[i];
+        }
+    }
+    return segundoMaior + segundoMenor;
+}
+
+function contaPalindromos(palavras) {
+    let count = 0;
+    for (let i = 0; i < palavras.length; i++) {
+        if (palavras[i] === palavras[i].split('').reverse().join('')) {
+            count++;
+        }
+    }
+    return count;
+}
+
+function somaStrings(strings) {
+    let soma = 0;
+    for (let i = 0; i < strings.length; i++) {
+        soma += parseInt(strings[i]);
+    }
+    return soma;
+}
+
+async function somaRequisicoes(endpoints) {
+    let somaTotal = 0;
+  
+    for (let endpoint of endpoints) {
+      try {
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+          throw new Error(`Erro ao acessar o endpoint ${endpoint}`);
+        }
+        const numero = await response.json();
+        somaTotal += numero;
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  
+    return somaTotal;
+}
+
+const cacaAoTesouro = async function (url, tesouro){
+    const config2 = {
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${tesouro}`
+        }
+    }
+    requisicao = await axios
+    .get(url, config2)
+    .then((response) => {
+        return response.data;
+    })
+    while (typeof requisicao !== 'number'){
+        requisicao = await axios
+        .get(requisicao, config2)
+        .then((response) => {
+            return response.data;
+        })
+    }
+    return requisicao;
+}
+
 main();
+
+
+// maior prefixo deu errado e soma requisicoes tb + n fiz o ultimo
